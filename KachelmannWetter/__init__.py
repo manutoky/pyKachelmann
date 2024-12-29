@@ -17,7 +17,6 @@ from .const import (
     #ATTR_FORECAST_HOURLY,
     #ATTR_GEOPOSITION,
     HTTP_HEADERS,
-    LANGUAGE_MAP,
     REMOVE_FROM_CURRENT_CONDITION,
     REMOVE_FROM_FORECAST,
     #REQUESTS_EXCEEDED,
@@ -26,7 +25,6 @@ from .exceptions import (
     ApiError,
     InvalidApiKeyError,
     InvalidCoordinatesError,
-    RequestsExceededError,
 )
 from .utils import (
     construct_url,
@@ -61,8 +59,6 @@ class KachelmannWetter:
         self.longitude = longitude
         self._api_key = api_key
         self._session = session
-        self._location_name: str | None = None
-        self._requests_remaining: int | None = None
         self.units = units
         update_http_headers(self._api_key)
 
@@ -126,7 +122,6 @@ class KachelmannWetter:
             location_key=self._location_key,
             hours=str(hours),
             metric=str(metric).lower(),
-            language=self.language,
         )
         data = await self._async_get_data(url)
         return parse_hourly_forecast(data, REMOVE_FROM_FORECAST)

@@ -1,5 +1,5 @@
 ## pyKachelmannwetter
-Python wrapper for getting weather data from KachelmannWetter.com API
+Python wrapper for getting weather data from KachelmannWetter.com API. 
 The wrapper is a work in progress and may never be finished. Ultimate goal would be to integrate it in Home Assistant.
 Heavily inspired by [https://github.com/bieniu/accuweather].
 

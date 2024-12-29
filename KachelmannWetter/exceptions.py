@@ -1,8 +1,7 @@
 """KachelmannWetter exceptions."""
 
-
-class AccuweatherError(Exception):
-    """Base class for Accuweather errors."""
+class KachelmannWetterError(Exception):
+    """Base class for KachelmannWetter errors."""
 
     def __init__(self, status: str) -> None:
         """Initialize."""
@@ -10,17 +9,13 @@ class AccuweatherError(Exception):
         self.status = status
 
 
-class ApiError(AccuweatherError):
+class ApiError(KachelmannWetterError):
     """Raised when AccuWeather API request ended in error."""
 
 
-class InvalidApiKeyError(AccuweatherError):
+class InvalidApiKeyError(KachelmannWetterError):
     """Raised when API Key format is invalid."""
 
 
-class InvalidCoordinatesError(AccuweatherError):
+class InvalidCoordinatesError(KachelmannWetterError):
     """Raised when coordinates are invalid."""
-
-
-class RequestsExceededError(AccuweatherError):
-    """Raised when allowed number of requests has been exceeded."""
