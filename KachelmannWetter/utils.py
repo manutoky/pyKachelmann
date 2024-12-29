@@ -9,12 +9,16 @@ from .const import (
     MAX_API_KEY_LENGTH,
     MAX_LATITUDE,
     MAX_LONGITUDE,
-    TEMPERATURES,
+    ALLOWED_FORECAST_TIMESTEPS,
+    ALLOWED_OBSERVATIONS_TIMESTEPS,
+    ALLOWED_UNITS,
     URLS,
     HTTP_HEADERS
 )
 
-from icecream import ic
+def valid_units(units: str) -> bool:
+    """Return True if units are valid."""
+    return units in ALLOWED_UNITS
 
 def valid_coordinates(latitude: float | None, longitude: float | None) -> bool:
     """Return True if coordinates are valid."""
@@ -25,11 +29,17 @@ def valid_coordinates(latitude: float | None, longitude: float | None) -> bool:
         and abs(longitude) <= MAX_LONGITUDE
     )
 
-
 def valid_api_key(api_key: str) -> bool:
     """Return True if API key is valid."""
     return isinstance(api_key, str) and len(api_key) == MAX_API_KEY_LENGTH
 
+def valid_forecast_timesteps(timesteps: str) -> bool:
+    """Return True if timesteps are valid."""
+    return timesteps in ALLOWED_FORECAST_TIMESTEPS
+
+def valid_observations_timesteps(timesteps: str) -> bool:
+    """Return True if timesteps are valid."""
+    return timesteps in ALLOWED_OBSERVATIONS_TIMESTEPS
 
 def construct_url(arg: str, **kwargs: str) -> str:
     """Construct AccuWeather API URL."""
@@ -45,7 +55,6 @@ def parse_current_condition(
     
     result = {key: data[key] for key in data if key not in to_remove}
     return result
-
 
 def parse_3day_forecast(
     data: dict[str, Any], to_remove: tuple[str, ...]

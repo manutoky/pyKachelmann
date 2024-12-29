@@ -19,3 +19,6 @@ class InvalidApiKeyError(KachelmannWetterError):
 
 class InvalidCoordinatesError(KachelmannWetterError):
     """Raised when coordinates are invalid."""
+
+class InvalidTimestepsError(KachelmannWetterError):
+    """Raised when timesteps are invalid."""

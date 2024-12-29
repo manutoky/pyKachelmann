@@ -28,6 +28,7 @@ from icecream import ic
 
 LATITUDE = 51.000
 LONGITUDE = 9.000
+RADIUS = 10
 API_KEY = ""
 
 logging.basicConfig(level=logging.DEBUG)
@@ -44,14 +45,29 @@ async def main():
                 longitude=LONGITUDE,
                 units="metric",
             )
+            ## Stations
+            # Search for the closest weather station
+            stations = await wetter.async_search_station(radius=RADIUS)
+            if stations:
+                station_id = stations[0]["id"]
+            else:
+                raise ApiError("No weather station found")
+            observation_latest = await wetter.async_get_station_observation_latest(station_id)
+            observations = await wetter.async_get_station_observations(station_id, "1d")
+            ## Current Weather
             current_conditions = await wetter.async_get_current_conditions()
-            forecast_3days = await wetter.async_get_3day_forecast(
-                units="metric"
+            ## Forecasts
+            forecast_3days = await wetter.async_get_3day_forecast()
+            trend_14days = await wetter.async_get_14day_trend()
+            standard_forecast = await wetter.async_get_standard_forecast(
+                timesteps="1h"
             )
-            trend_14days = await wetter.async_get_14day_trend(
-                units="metric"
+            advanced_forecast = await wetter.async_get_advanced_forecast(
+                timesteps="1h"
             )
-
+            ## Tools
+            astronomical = await wetter.async_get_astronomical_data()
+            
         except (
             ApiError,
             InvalidApiKeyError,
@@ -60,9 +76,14 @@ async def main():
             ) as error:
             print(f"Error: {error}")
         else:
+            ic(observation_latest)
+            ic(observations)
             ic(current_conditions)
             ic(forecast_3days)
             ic(trend_14days)
+            ic(standard_forecast)
+            ic(advanced_forecast)
+            ic(astronomical)
 
 loop = asyncio.new_event_loop()
 loop.run_until_complete(main())
