@@ -4,6 +4,7 @@ from __future__ import annotations
 
 ATTR_CURRENT_CONDITIONS: str = "currentconditions"
 ATTR_FORECAST_3DAYS: str = "forecasts_3days"
+ATTR_TREND_14DAYS: str = "trend_14days"
 ATTR_FORECAST_DAILY: str = "forecasts"
 ATTR_FORECAST_HOURLY: str = "forecasts_hourly"
 ATTR_GEOPOSITION: str = "geoposition"
@@ -22,6 +23,9 @@ REMOVE_FROM_CURRENT_CONDITION: tuple[str, ...] = (
 REMOVE_FROM_FORECAST: tuple[str, ...] = (
 
 )
+REMOVE_FROM_TREND: tuple[str, ...] = (
+
+)
 TEMPERATURES: tuple[str, ...] = (
     "Temperature",
     "RealFeelTemperature",
@@ -35,6 +39,10 @@ URLS: dict[str, str] = {
     ),
     ATTR_FORECAST_3DAYS: (
         "forecast/{lat}/{lon}/3day"
+        "?units={units}"
+    ),
+    ATTR_TREND_14DAYS: (
+        "forecast/{lat}/{lon}/trend14days"
         "?units={units}"
     ),
   

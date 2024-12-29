@@ -50,7 +50,7 @@ def parse_current_condition(
 def parse_3day_forecast(
     data: dict[str, Any], to_remove: tuple[str, ...]
 ) -> list[dict[str, Any]]:
-    """Parse and clean daily forecast API response."""
+    """Parse and clean forecast API response."""
     # parsed_data = [
     #     {key: value for key, value in item.items() if key not in to_remove}
     #     for item in data["data"]
@@ -58,18 +58,13 @@ def parse_3day_forecast(
 
     return data
 
-def parse_hourly_forecast(
-    data: list[dict[str, Any]], to_remove: tuple[str, ...]
+def parse_14day_trend(
+    data: dict[str, Any], to_remove: tuple[str, ...]
 ) -> list[dict[str, Any]]:
-    """Parse and clean hourly forecast API response."""
-    result = [
-        {key: value for key, value in item.items() if key not in to_remove}
-        for item in data
-    ]
+    """Parse and clean trend API response."""
+    # parsed_data = [
+    #     {key: value for key, value in item.items() if key not in to_remove}
+    #     for item in data["data"]
+    # ]
 
-    for hour in result:
-        for key, value in hour.items():
-            if isinstance(value, str):
-                hour[key] = value.lower()
-
-    return result
+    return data

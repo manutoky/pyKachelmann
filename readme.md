@@ -22,12 +22,13 @@ from KachelmannWetter import (
     ApiError,
     InvalidApiKeyError,
     InvalidCoordinatesError,
-    RequestsExceededError,
 )
 
+from icecream import ic
+
 LATITUDE = 51.000
-LONGITUDE = 10.000
-API_KEY = "xxxx"
+LONGITUDE = 9.000
+API_KEY = ""
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -47,23 +48,21 @@ async def main():
             forecast_3days = await wetter.async_get_3day_forecast(
                 units="metric"
             )
-            # forecast_hourly = await wetter.async_get_hourly_forecast(
-            #     hours=12, metric=True
-            # )
+            trend_14days = await wetter.async_get_14day_trend(
+                units="metric"
+            )
+
         except (
             ApiError,
             InvalidApiKeyError,
             InvalidCoordinatesError,
             ClientError,
-            RequestsExceededError,
-        ) as error:
+            ) as error:
             print(f"Error: {error}")
         else:
-            #print(f"Location: {wetter.location_name} ({wetter.location_key})")
-            #print(f"Requests remaining: {wetter.requests_remaining}")
-            print(f"Current: {current_conditions}")
-            print(f"Forecast: {forecast_3days}")
-
+            ic(current_conditions)
+            ic(forecast_3days)
+            ic(trend_14days)
 
 loop = asyncio.new_event_loop()
 loop.run_until_complete(main())

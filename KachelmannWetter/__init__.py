@@ -14,12 +14,11 @@ from icecream import ic
 from .const import (
     ATTR_CURRENT_CONDITIONS,
     ATTR_FORECAST_3DAYS,
-    #ATTR_FORECAST_HOURLY,
-    #ATTR_GEOPOSITION,
+    ATTR_TREND_14DAYS,
     HTTP_HEADERS,
     REMOVE_FROM_CURRENT_CONDITION,
     REMOVE_FROM_FORECAST,
-    #REQUESTS_EXCEEDED,
+    REMOVE_FROM_TREND,
 )
 from .exceptions import (
     ApiError,
@@ -30,9 +29,9 @@ from .utils import (
     construct_url,
     parse_current_condition,
     parse_3day_forecast,
-    parse_hourly_forecast,
+    parse_14day_trend,
     valid_api_key,
-    #valid_coordinates,
+    valid_coordinates,
     update_http_headers
 )
 
@@ -57,6 +56,10 @@ class KachelmannWetter:
             )
         self.latitude = latitude
         self.longitude = longitude
+        if not valid_coordinates(self.latitude, self.longitude):
+            raise InvalidCoordinatesError(
+                "Your coordinates must be a float between -90 and 90 for latitude and -180 and 180 for longitude"
+            )
         self._api_key = api_key
         self._session = session
         self.units = units
@@ -95,7 +98,7 @@ class KachelmannWetter:
     async def async_get_3day_forecast(
         self, units: str = "metric"
     ) -> list[dict[str, Any]]:
-        """Retrieve daily forecast data from KachelmannWetter."""
+        """Retrieve 3 day forecast data from KachelmannWetter."""
 
         url = construct_url(
             ATTR_FORECAST_3DAYS,
@@ -105,6 +108,20 @@ class KachelmannWetter:
         )
         data = await self._async_get_data(url)
         return parse_3day_forecast(data, REMOVE_FROM_FORECAST)
+
+    async def async_get_14day_trend(
+        self, units: str = "metric"
+    ) -> list[dict[str, Any]]:
+        """Retrieve 14 day trend data from KachelmannWetter."""
+
+        url = construct_url(
+            ATTR_TREND_14DAYS,
+            lat=self.latitude,
+            lon=self.longitude,
+            units=self.units,
+        )
+        data = await self._async_get_data(url)
+        return parse_14day_trend(data, REMOVE_FROM_TREND)
 
     async def async_get_hourly_forecast(
         self, hours: int = 12, metric: bool = True
